@@ -1,464 +1,81 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mini Landing</title>
-  <meta name="description" content="단일 HTML로 만든 예쁜 미니 랜딩 페이지" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Custom Layout Page</title>
+
   <style>
     :root{
-      --bg0:#070A12;
-      --bg1:#0B1220;
-      --card: rgba(255,255,255,.08);
-      --stroke: rgba(255,255,255,.14);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.70);
-      --shadow: 0 20px 60px rgba(0,0,0,.45);
-      --r: 22px;
+      --bg:#eef2f7;
+      --card:#285a78;
+      --text:#ffffff;
+      --radius:28px;
     }
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
+
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Apple SD Gothic Neo, Helvetica, Arial, "Segoe UI Emoji";
-      color: var(--text);
-      background: radial-gradient(1200px 800px at 20% 15%, rgba(120,90,255,.35), transparent 55%),
-                  radial-gradient(900px 700px at 85% 20%, rgba(0,220,255,.22), transparent 60%),
-                  radial-gradient(1100px 900px at 50% 105%, rgba(255,90,170,.22), transparent 60%),
-                  linear-gradient(180deg, var(--bg0), var(--bg1));
-      overflow-x:hidden;
-    }
-
-    /* soft noise */
-    body::before{
-      content:"";
-      position:fixed; inset:0;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
-      mix-blend-mode: overlay;
-      opacity:.08;
-      pointer-events:none;
-    }
-
-    .wrap{
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 26px 18px 70px;
-      position:relative;
-    }
-
-    header{
+      padding:40px 20px;
+      background:var(--bg);
+      font-family: "Noto Sans KR", sans-serif;
       display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      padding: 10px 6px 22px;
-    }
-    .brand{
-      display:flex; align-items:center; gap:12px;
-      user-select:none;
-    }
-    .logo{
-      width:38px; height:38px;
-      border-radius: 12px;
-      background:
-        radial-gradient(18px 18px at 30% 30%, rgba(255,255,255,.7), transparent 60%),
-        linear-gradient(135deg, rgba(120,90,255,1), rgba(0,220,255,1));
-      box-shadow: 0 12px 30px rgba(120,90,255,.25);
-      border:1px solid rgba(255,255,255,.18);
-    }
-    .brand b{ letter-spacing:.2px; }
-    nav{
-      display:flex; gap:10px; flex-wrap:wrap;
-    }
-    nav a{
-      color: var(--muted);
-      text-decoration:none;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border:1px solid transparent;
-      transition: .18s ease;
-    }
-    nav a:hover{
-      color: var(--text);
-      border-color: rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
+      justify-content:center;
     }
 
-    .hero{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 18px;
-      align-items:stretch;
-      margin-top: 6px;
-    }
-    @media (max-width: 880px){
-      .hero{ grid-template-columns: 1fr; }
+    .container{
+      width:100%;
+      max-width:1200px;
+      display:flex;
+      flex-direction:column;
+      gap:40px;
     }
 
     .card{
-      background: var(--card);
-      border:1px solid var(--stroke);
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background:var(--card);
+      color:var(--text);
+      border-radius:var(--radius);
+      padding:40px;
+      font-size:22px;
+      text-align:center;
+      box-shadow:0 6px 20px rgba(0,0,0,0.15);
     }
 
-    .heroMain{
-      padding: 28px 26px;
-      position:relative;
-      overflow:hidden;
-    }
-    .pill{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color: var(--muted);
-      font-size: 13px;
-      width:max-content;
-    }
-    .dot{
-      width:8px; height:8px; border-radius:99px;
-      background: linear-gradient(135deg, rgba(120,90,255,1), rgba(0,220,255,1));
-      box-shadow: 0 0 0 4px rgba(0,220,255,.10);
-    }
-
-    h1{
-      margin: 14px 0 10px;
-      font-size: clamp(28px, 4vw, 46px);
-      line-height: 1.06;
-      letter-spacing: -0.8px;
-    }
-    .sub{
-      margin:0 0 18px;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.7;
-      max-width: 56ch;
-    }
-
-    .actions{
-      display:flex; gap:10px; flex-wrap:wrap;
-      margin-top: 6px;
-    }
-    .btn{
-      appearance:none;
-      border:0;
-      cursor:pointer;
-      padding: 12px 14px;
-      border-radius: 14px;
-      font-weight: 650;
-      letter-spacing: .1px;
-      transition: transform .12s ease, filter .12s ease, background .18s ease;
-      display:inline-flex; align-items:center; gap:10px;
-      text-decoration:none;
-      user-select:none;
-    }
-    .btn:active{ transform: translateY(1px) scale(.99); }
-
-    .btnPrimary{
-      color: #071018;
-      background: linear-gradient(135deg, rgba(120,90,255,1), rgba(0,220,255,1));
-      box-shadow: 0 12px 34px rgba(0,220,255,.16);
-    }
-    .btnPrimary:hover{ filter: brightness(1.05); }
-
-    .btnGhost{
-      color: var(--text);
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.16);
-    }
-    .btnGhost:hover{ background: rgba(255,255,255,.09); }
-
-    .mini{
-      display:flex; gap:12px; flex-wrap:wrap;
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .mini span{
-      display:inline-flex; gap:8px; align-items:center;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border:1px dashed rgba(255,255,255,.18);
-      background: rgba(255,255,255,.04);
-    }
-
-    /* Right side */
-    .side{
-      padding: 18px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
-    .panel{
-      padding: 16px;
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(10,16,26,.35);
-    }
-    .panel h3{
-      margin:0 0 8px;
-      font-size: 14px;
-      letter-spacing:.2px;
-      color: rgba(255,255,255,.86);
-    }
-    .metric{
+    /* 2열 레이아웃 */
+    .row{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .kpi{
-      border-radius: 16px;
-      padding: 12px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-    }
-    .kpi b{ font-size: 18px; }
-    .kpi div{ color: var(--muted); font-size: 12.5px; margin-top: 4px; }
-
-    .inputRow{
-      display:flex; gap:10px; margin-top: 10px;
-    }
-    input{
-      flex:1;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      outline:none;
-    }
-    input::placeholder{ color: rgba(255,255,255,.45); }
-    input:focus{
-      border-color: rgba(0,220,255,.45);
-      box-shadow: 0 0 0 4px rgba(0,220,255,.12);
+      grid-template-columns:1fr 1fr;
+      gap:40px;
     }
 
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 18px;
-    }
-    @media (max-width: 880px){ .grid{ grid-template-columns: 1fr; } }
-
-    .feature{
-      padding: 16px;
-      position:relative;
-      overflow:hidden;
-    }
-    .feature b{ display:block; margin-top: 10px; }
-    .feature p{ margin: 8px 0 0; color: var(--muted); line-height:1.6; font-size: 14px; }
-    .icon{
-      width:38px; height:38px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      display:grid; place-items:center;
-    }
-    .icon svg{ opacity:.92; }
-
-    footer{
-      margin-top: 26px;
-      padding: 18px 6px 0;
-      color: rgba(255,255,255,.55);
-      font-size: 13px;
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    /* subtle floating blob */
-    .blob{
-      position:absolute;
-      width: 440px;
-      height: 440px;
-      border-radius: 999px;
-      filter: blur(26px);
-      opacity:.16;
-      background: radial-gradient(circle at 30% 30%, rgba(0,220,255,1), transparent 55%),
-                  radial-gradient(circle at 70% 60%, rgba(255,90,170,1), transparent 55%),
-                  radial-gradient(circle at 40% 80%, rgba(120,90,255,1), transparent 60%);
-      right: -180px;
-      top: -160px;
-      transform: rotate(18deg);
-      pointer-events:none;
+    @media (max-width:900px){
+      .row{
+        grid-template-columns:1fr;
+      }
     }
   </style>
 </head>
-
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <b>Mini Landing</b><br/>
-          <span style="color:rgba(255,255,255,.6);font-size:12px;">single-file • clean • modern</span>
-        </div>
-      </div>
-      <nav>
-        <a href="#features">기능</a>
-        <a href="#demo">데모</a>
-        <a href="#contact">연락</a>
-      </nav>
-    </header>
 
-    <section class="hero">
-      <div class="card heroMain" id="demo">
-        <div class="blob" aria-hidden="true"></div>
+  <div class="container">
 
-        <div class="pill">
-          <span class="dot" aria-hidden="true"></span>
-          <span>오늘도 가볍게, 예쁘게.</span>
-        </div>
+    <!-- HEADER -->
+    <div class="card" style="font-size:26px; font-weight:700;">
+      Header
+    </div>
 
-        <h1>
-          한 파일로 끝나는<br/>
-          감각적인 웹페이지
-        </h1>
+    <!-- 1st row: section | image -->
+    <div class="row">
+      <div class="card">section</div>
+      <div class="card">Image</div>
+    </div>
 
-        <p class="sub">
-          HTML 파일 하나만 저장하면 바로 열리는 미니 랜딩 페이지 템플릿입니다.
-          유리(Glassmorphism) 느낌 + 그라데이션 + 깔끔한 카드 UI로 구성했어요.
-        </p>
+    <!-- 2nd row: image | text -->
+    <div class="row">
+      <div class="card">image</div>
+      <div class="card">Text or div</div>
+    </div>
 
-        <div class="actions">
-          <a class="btn btnPrimary" href="#contact" role="button">
-            시작하기
-            <span aria-hidden="true">→</span>
-          </a>
-          <a class="btn btnGhost" href="#features" role="button">
-            기능 보기
-          </a>
-        </div>
-
-        <div class="mini" aria-label="highlights">
-          <span>⚡ 빠른 로딩</span>
-          <span>🧊 글래스 UI</span>
-          <span>📱 반응형</span>
-          <span>🧩 커스터마이즈 쉬움</span>
-        </div>
-      </div>
-
-      <aside class="card side">
-        <div class="panel">
-          <h3>빠른 데모</h3>
-          <div style="color:var(--muted);font-size:13px;line-height:1.6;">
-            아래에 이름을 입력하고 버튼을 눌러보세요.
-          </div>
-          <div class="inputRow">
-            <input id="name" placeholder="예: Kyungsu" autocomplete="off" />
-            <button class="btn btnPrimary" id="helloBtn" type="button">인사</button>
-          </div>
-          <div id="toast" style="margin-top:10px;color:rgba(255,255,255,.75);font-size:13px;min-height:18px;"></div>
-        </div>
-
-        <div class="panel">
-          <h3>스냅샷</h3>
-          <div class="metric">
-            <div class="kpi">
-              <b>1</b>
-              <div>HTML 파일</div>
-            </div>
-            <div class="kpi">
-              <b>0</b>
-              <div>외부 라이브러리</div>
-            </div>
-            <div class="kpi">
-              <b>✓</b>
-              <div>반응형</div>
-            </div>
-            <div class="kpi">
-              <b>∞</b>
-              <div>확장 가능</div>
-            </div>
-          </div>
-        </div>
-      </aside>
-    </section>
-
-    <section class="grid" id="features" style="margin-top:18px;">
-      <div class="card feature">
-        <div class="icon" aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2l9 4v6c0 5-3.5 9.7-9 10-5.5-.3-9-5-9-10V6l9-4z" stroke="currentColor" stroke-width="2"/>
-          </svg>
-        </div>
-        <b>깔끔한 구성</b>
-        <p>헤더 · 히어로 · 기능 카드 · 푸터까지 기본 구조를 딱 예쁘게 잡아뒀어요.</p>
-      </div>
-
-      <div class="card feature">
-        <div class="icon" aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M21 12a9 9 0 1 1-9-9" stroke="currentColor" stroke-width="2"/>
-            <path d="M21 3v9h-9" stroke="currentColor" stroke-width="2"/>
-          </svg>
-        </div>
-        <b>부드러운 인터랙션</b>
-        <p>버튼 hover/active, 입력 focus 효과를 넣어서 “만지는 맛”이 있어요.</p>
-      </div>
-
-      <div class="card feature">
-        <div class="icon" aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M4 7h16M4 12h10M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <b>커스터마이즈 쉬움</b>
-        <p><code>:root</code> 색상 변수만 바꾸면 테마가 바로 바뀌는 구조입니다.</p>
-      </div>
-    </section>
-
-    <section class="card" id="contact" style="margin-top:12px;padding:18px;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;">
-        <div>
-          <div class="pill"><span class="dot" aria-hidden="true"></span><span>Contact</span></div>
-          <h2 style="margin:12px 0 6px;font-size:22px;letter-spacing:-.3px;">이 페이지를 내 걸로 만들기</h2>
-          <div style="color:var(--muted);line-height:1.7;font-size:14px;max-width:64ch;">
-            로고/문구/버튼 링크만 바꿔도 바로 개인 포트폴리오나 프로젝트 소개 페이지로 쓸 수 있어요.
-          </div>
-        </div>
-        <a class="btn btnGhost" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">맨 위로 ↑</a>
-      </div>
-    </section>
-
-    <footer>
-      <span>© <span id="year"></span> Mini Landing. All rights reserved.</span>
-      <span style="color:rgba(255,255,255,.45);">Made with plain HTML/CSS/JS</span>
-    </footer>
   </div>
 
-  <script>
-    // year
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // demo interaction
-    const nameEl = document.getElementById("name");
-    const toast = document.getElementById("toast");
-    document.getElementById("helloBtn").addEventListener("click", () => {
-      const name = (nameEl.value || "").trim();
-      const who = name ? name : "친구";
-      toast.textContent = `안녕하세요, ${who} 👋  오늘도 좋은 하루 되세요!`;
-      // tiny pulse
-      toast.animate(
-        [{ transform:"translateY(0)", opacity:.8 }, { transform:"translateY(-2px)", opacity:1 }, { transform:"translateY(0)", opacity:1 }],
-        { duration: 260, easing: "ease-out" }
-      );
-    });
-
-    // enter key
-    nameEl.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") document.getElementById("helloBtn").click();
-    });
-  </script>
 </body>
 </html>
